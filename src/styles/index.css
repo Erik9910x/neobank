@@ -142,6 +142,12 @@ body {
   to { transform: translateY(0); }
 }
 
+/* ── Screen Height & DVH Fixes ────────────────────── */
+.h-screen-safe {
+  height: 100vh;
+  height: 100dvh;
+}
+
 /* ── Reset & Base ──────────────────────────────────── */
 *, *::before, *::after {
   margin: 0; padding: 0; box-sizing: border-box;
@@ -168,7 +174,6 @@ body {
   position: relative;
   width: 100%;
   max-width: 100%;
-  min-height: 100vh;
   min-height: 100dvh;
   margin: 0 auto;
   background: var(--bg-primary);
@@ -694,17 +699,18 @@ body {
 .success-aura::before {
     content: '';
     position: absolute;
-    inset: -12px;
+    inset: -20px;
     background: var(--primary-glow);
     border-radius: 50%;
-    filter: blur(15px);
+    filter: blur(25px);
     z-index: -1;
-    animation: auraPulse 2s infinite ease-in-out;
+    opacity: 0.7;
+    animation: auraPulse 1.5s infinite ease-in-out;
 }
 
 @keyframes auraPulse {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.2); opacity: 0.8; }
+    0%, 100% { transform: scale(1); opacity: 0.4; }
+    50% { transform: scale(1.4); opacity: 0.9; }
 }
 
 .btn-primary:active {

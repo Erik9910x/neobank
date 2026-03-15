@@ -42,7 +42,7 @@ export function renderQrPay(container) {
             100% { transform: scale(2.5); opacity: 0; }
         }
       </style>
-      <div class="relative flex h-[100dvh] w-full flex-col bg-background-light dark:bg-background-dark max-w-md mx-auto overflow-hidden font-display shadow-2xl">
+      <div class="relative flex h-[100dvh] w-full flex-col bg-background-light dark:bg-background-dark max-w-md mx-auto overflow-hidden font-display shadow-2xl safe-area-bottom">
         <!-- Header - Notch Safe -->
         <header class="pt-6 pb-4 px-6 flex items-center justify-between bg-transparent z-20 notch-safe-top">
           <button id="btn-back" class="flex size-10 items-center justify-center rounded-full bg-slate-900/40 dark:bg-slate-100/10 backdrop-blur-md transition-colors hover:bg-slate-900/60" style="${mode === 'scan' ? 'background:rgba(15,23,42,0.4)' : ''}">
@@ -347,7 +347,7 @@ export function renderQrPay(container) {
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     const code = window.jsQR(imageData.data, imageData.width, imageData.height, {
-      inversionAttempts: "dontInvert"
+      inversionAttempts: "attemptBoth"
     });
 
     if (code) {

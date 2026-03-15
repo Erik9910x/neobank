@@ -50,7 +50,7 @@ export function renderPersonalization(container) {
 <button id="btn-save" class="text-primary font-semibold text-sm">Lưu</button>
 </div>
 </header>
-<main class="flex-1 overflow-y-auto custom-scrollbar max-w-md mx-auto w-full px-4 py-6 space-y-8 pb-24 stagger">
+<main class="flex-1 max-w-md mx-auto w-full px-4 py-6 space-y-8 pb-24 stagger">
 <!-- UI Preview Card Section -->
 <section>
 <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4 px-1">Xem trước</h3>

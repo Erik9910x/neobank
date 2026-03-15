@@ -249,11 +249,11 @@ export function renderTransfer(container) {
 </div>
 
 <div id="bill-screen" class="fixed inset-0 z-[70] bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display flex flex-col overflow-y-auto" style="display:none">
-  <div class="relative flex screen w-full max-w-md mx-auto overflow-x-hidden pb-10">
+  <div class="relative flex min-h-[100dvh] w-full max-w-md mx-auto flex-col overflow-x-hidden pb-10 safe-area-bottom">
     <div id="capture-area" class="flex flex-col flex-1 bg-background-dark">
       <!-- Header / Notch Space -->
       <div class="safe-top bg-background-dark h-8"></div>
-      <!-- Top Navigation (inside capture area but will be handled) -->
+      <!-- Top Navigation -->
       <div class="flex items-center justify-between p-4 bg-background-dark">
         <button id="btn-close-bill-top" class="flex items-center justify-center size-10 rounded-full hover:bg-white/10 transition-colors">
           <span class="material-symbols-outlined text-slate-100">close</span>
@@ -265,10 +265,9 @@ export function renderTransfer(container) {
       </div>
       <!-- Success Animation/Icon Area -->
       <div class="flex flex-col items-center pt-8 pb-6 px-4 bg-background-dark">
-        <div class="relative flex items-center justify-center mb-4">
-          <div class="absolute size-20 bg-primary/20 rounded-full"></div>
-          <div class="size-16 bg-primary rounded-full flex items-center justify-center shadow-lg shadow-primary/20 success-aura">
-            <span class="material-symbols-outlined text-background-dark text-4xl font-bold">check</span>
+        <div class="relative flex items-center justify-center mb-6">
+          <div class="size-24 bg-primary rounded-full flex items-center justify-center shadow-[0_0_50px_var(--primary-glow)] success-aura animate-[pop_0.6s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
+            <span class="material-symbols-outlined text-background-dark text-5xl font-bold">check</span>
           </div>
         </div>
         <p class="text-primary font-bold text-lg tracking-wide uppercase">Chuyển thành công</p>
