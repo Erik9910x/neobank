@@ -47,19 +47,17 @@ export function renderPriority(container) {
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
         }
       </style>
-      <div class="relative flex h-auto screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden animate-fade-in">
+      <div class="screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 flex flex-col font-display">
         <!-- Header -->
-        <div class="flex items-center p-4 justify-between notch-safe-top">
-          <button id="btn-back" class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start pointer">
-            <span class="material-symbols-outlined text-2xl">arrow_back</span>
+        <header class="notch-safe-top z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+          <button id="btn-back" class="size-10 rounded-full flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
           </button>
-          <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center">Priority Card</h2>
-          <div class="flex w-12 items-center justify-end">
-            <button class="flex size-10 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
-              <span class="material-symbols-outlined text-xl">more_vert</span>
-            </button>
-          </div>
-        </div>
+          <h2 class="text-lg font-bold">Thẻ Priority</h2>
+          <div class="size-10"></div>
+        </header>
+
+        <main class="scroll-content stagger px-6 pb-32">
 
         <!-- Card Display Section -->
         <div class="p-6 animate-slide-up">
@@ -192,9 +190,9 @@ export function renderPriority(container) {
           </div>
         </div>
       </div>
-    </section>    <!-- Spacer for content -->
-        <div style="height: 100px;"></div>
-      </div>`;
+    </section>
+  </main>
+</div>`;
 
     container.querySelector('#btn-back').addEventListener('click', () => navigate('dashboard'));
     

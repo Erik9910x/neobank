@@ -66,9 +66,13 @@
 /* ── Prevent Mobile Browser Jitter ────────────────── */
 html, body {
   overflow: hidden;
-  height: 100%;
+  height: 100dvh;
   width: 100%;
   position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
 }
@@ -123,8 +127,15 @@ body {
   box-shadow: 0 4px 14px 0 var(--accent-glow) !important;
 }
 
-.notch-safe-top, .notch-safe { padding-top: env(safe-area-inset-top); }
-.notch-safe-bottom, .bottom-safe { padding-bottom: env(safe-area-inset-bottom); }
+.notch-safe-top, .notch-safe { 
+  padding-top: env(safe-area-inset-top, 44px); 
+}
+.notch-safe-bottom, .bottom-safe { 
+  padding-bottom: env(safe-area-inset-bottom, 20px); 
+}
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+}
 
 /* Material Symbols filled variant */
 .font-fill { font-variation-settings: 'FILL' 1; }
@@ -181,26 +192,45 @@ body {
   position: relative;
   width: 100%;
   max-width: 100%;
-  min-height: 100dvh;
+  height: 100dvh;
   margin: 0 auto;
   background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Lock the shell */
+}
+
+/* ── Content Container (Flexible) ─────────────────── */
+#app-content {
+  flex: 1;
+  width: 100%;
+  position: relative;
+  overflow: hidden; /* Let the screen inside handle scroll */
   display: flex;
   flex-direction: column;
 }
 
 /* ── Screen container ──────────────────────────────── */
 .screen {
+  flex: 1;
   width: 100%;
   height: 100%;
-  overflow-y: scroll; /* Force scrolling at screen level */
-  overflow-x: hidden;
-  scrollbar-width: none;
+  overflow: hidden; /* Lock screen, only content scrolls */
   background: var(--bg-primary);
   display: flex;
   flex-direction: column;
-  -webkit-overflow-scrolling: touch;
+  position: relative;
 }
-.screen::-webkit-scrollbar { display: none; }
+
+.scroll-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
+  scrollbar-width: none;
+}
+.scroll-content::-webkit-scrollbar { display: none; }
 
 .screen-content {
   flex: 1;

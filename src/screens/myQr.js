@@ -25,24 +25,18 @@ export function renderMyQr(container) {
     container.className = 'screen';
     container.style.padding = '0';
     container.innerHTML = `
-      <div class="relative flex screen w-full flex-col overflow-x-hidden bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+      <div class="screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 flex flex-col font-display">
         
         <!-- Header / Navigation Bar -->
-        <header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-          <div class="flex items-center p-4 justify-between max-w-md mx-auto notch-safe-top">
-            <div id="btn-back" class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer">
-              <span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
-            </div>
-            <h2 class="text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">My QR Code</h2>
-            <div class="flex size-10 items-center justify-end">
-              <button class="flex size-10 cursor-pointer items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
-                <span class="material-symbols-outlined text-slate-900 dark:text-slate-100">more_horiz</span>
-              </button>
-            </div>
+        <header class="notch-safe-top z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+          <div id="btn-back" class="flex size-10 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+            <span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
           </div>
+          <h2 class="text-lg font-bold">Mã QR của tôi</h2>
+          <div class="size-10"></div>
         </header>
 
-        <main class="max-w-md mx-auto w-full pb-12 flex-1 animate-fade-in">
+        <main class="scroll-content animate-fade-in pb-32">
           <!-- Main QR Card Section -->
           <div class="p-6">
             <div class="flex flex-col items-center justify-start rounded-xl bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 p-8 shadow-2xl relative overflow-hidden animate-pop" style="animation-delay: 0.1s">

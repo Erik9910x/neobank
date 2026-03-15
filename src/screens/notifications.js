@@ -11,20 +11,16 @@ import { captureAndShareReceipt } from '../utils/receipt.js';
 export function renderNotifications(container) {
   async function load() {
     container.innerHTML = `
-<div class="relative flex screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden pb-20">
-  <header class="notch-safe-top pt-4 px-4 bg-background-light dark:bg-background-dark sticky top-0 z-50">
-    <div class="flex items-center justify-between pb-4">
-      <div class="flex items-center gap-3">
-        <button id="btn-back-loading" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-primary/10 transition-colors">
-          <span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back_ios_new</span>
-        </button>
-        <div class="screen-content stagger">
-        <div class="page-header"><h1 class="page-title">Thông báo</h1></div>
-        </div>
-      </div>
+<div class="screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+  <header class="notch-safe-top z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <button id="btn-back-loading" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-primary/10 transition-colors">
+        <span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back_ios_new</span>
+      </button>
+      <h1 class="text-lg font-bold">Thông báo</h1>
     </div>
   </header>
-  <main class="flex-1 overflow-y-auto px-4 py-6 space-y-4">
+  <main class="scroll-content px-4 py-6 space-y-4">
     <!-- Skeleton Loader -->
     ${skeletonRows(8)}
   </main>
@@ -38,28 +34,28 @@ export function renderNotifications(container) {
   function render(notifications) {
 
     container.innerHTML = `
-<div class="relative flex screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden pb-20">
+<div class="screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
   <!-- Header Section -->
-  <header class="notch-safe-top pt-4 px-4 bg-background-light dark:bg-background-dark sticky top-0 z-50">
-    <div class="flex items-center justify-between pb-4">
-      <div class="flex items-center gap-3">
-        <button id="btn-back" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-primary/10 transition-colors">
-          <span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back_ios_new</span>
-        </button>
-        <div class="screen-content stagger">
-        <div class="page-header"><h1 class="page-title">Thông báo</h1></div>
-          ${notifications.filter(n => !n.read).length > 0 ? `
-          <span class="flex items-center justify-center bg-primary text-white text-[10px] font-bold h-5 min-w-5 px-1.5 rounded-full neon-glow">
-            ${notifications.filter(n => !n.read).length}
-          </span>` : ''}
-        </div>
-      </div>
-      <button class="text-primary text-sm font-semibold hover:opacity-80 transition-opacity">
-        Đã đọc tất cả
+  <header class="notch-safe-top z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <button id="btn-back" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-primary/10 transition-colors">
+        <span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back_ios_new</span>
       </button>
+      <div class="flex items-baseline gap-2">
+        <h1 class="text-lg font-bold">Thông báo</h1>
+        ${notifications.filter(n => !n.read).length > 0 ? `
+        <span class="flex items-center justify-center bg-primary text-white text-[10px] font-bold h-5 min-w-5 px-1.5 rounded-full neon-glow">
+          ${notifications.filter(n => !n.read).length}
+        </span>` : ''}
+      </div>
     </div>
-    <!-- Tabs -->
-    <div class="flex border-b border-slate-200 dark:border-slate-800">
+    <button class="text-primary text-sm font-semibold hover:opacity-80 transition-opacity">
+      Đã đọc tất cả
+    </button>
+  </header>
+  
+  <div class="px-6 border-b border-slate-200 dark:border-slate-800 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+    <div class="flex">
       <button class="flex-1 py-3 text-sm font-bold border-b-2 border-primary text-primary transition-all">
         Tất cả
       </button>
@@ -70,10 +66,9 @@ export function renderNotifications(container) {
         Cảnh báo
       </button>
     </div>
-  </header>
+  </div>
 
-  <!-- Notification List -->
-  <main class="flex-1 overflow-y-auto px-4 py-6 space-y-4 stagger">
+  <main class="scroll-content px-4 py-6 space-y-4 stagger">
     ${notifications.length === 0 ? '<p class="text-sm text-slate-500 text-center" style="padding:40px 0">Không có thông báo</p>' : ''}
     
     ${notifications.map((n, i) => {

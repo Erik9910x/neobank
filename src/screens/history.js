@@ -52,10 +52,10 @@ export function renderHistory(container) {
     }
 
     container.innerHTML = `
-      <div class="relative flex screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden">
+      <div class="screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 flex flex-col font-display">
         <!-- Header -->
-        <header class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-          <div class="flex items-center p-4 justify-between notch-safe-top">
+        <header class="notch-safe-top z-20 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+          <div class="flex items-center p-4 justify-between">
             <button id="btn-back" class="flex size-10 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors" onclick="history.back()">
               <span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
             </button>

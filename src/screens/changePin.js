@@ -13,19 +13,19 @@ export function renderChangePin(container) {
     const userName = res.ok ? res.user.name.toUpperCase() : 'NGUYEN VAN A';
 
     container.innerHTML = `
-      <div class="relative flex min-h-[100dvh] w-full flex-col overflow-x-hidden max-w-md mx-auto">
-        <!-- Top App Bar -->
-        <header class="sticky top-0 z-50 bg-[var(--bg-primary)]/80 backdrop-blur-md pt-6 pb-2 px-4 flex items-center justify-between">
-          <button id="btn-back" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-[var(--accent)]/10 transition-colors">
-            <span class="material-symbols-outlined text-[var(--text-primary)]">arrow_back</span>
+      <div class="screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 flex flex-col font-display">
+        <!-- Header -->
+        <header class="notch-safe-top z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+          <button id="btn-back" class="size-10 rounded-full flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
           </button>
-          <h1 class="text-lg font-bold leading-tight tracking-tight flex-1 text-center">Change Card PIN</h1>
-          <div class="flex w-10 h-10 items-center justify-center rounded-full bg-[var(--accent)]/10">
-            <span class="material-symbols-outlined text-[var(--accent)]">lock</span>
+          <h1 class="text-lg font-bold">Thay đổi mã PIN</h1>
+          <div class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined">lock</span>
           </div>
         </header>
         
-        <main class="flex-1 px-6 pb-28">
+        <main class="scroll-content stagger px-6 pb-32">
           <div class="mt-4 mb-6">
             <p class="text-[var(--text-muted)] text-sm font-medium">Update the PIN used for your NeoBank Visa card</p>
           </div>
@@ -121,15 +121,14 @@ export function renderChangePin(container) {
         </main>
 
         <!-- Bottom Action Button -->
-        <footer class="fixed bottom-0 w-full max-w-md p-6 bg-gradient-to-t from-[var(--bg-primary)] via-[var(--bg-primary)] to-transparent" style="padding-bottom: max(24px, env(safe-area-inset-bottom));">
-          <button id="btn-update-pin" class="w-full bg-[var(--accent)] hover:bg-[var(--accent)]/90 text-[#000] font-bold py-4 rounded-xl shadow-[0_0_20px_var(--accent-glow)] transition-all flex items-center justify-center gap-2 group active:scale-[0.98]">
-            Update PIN
+        <footer class="p-6 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+          <button id="btn-update-pin" class="w-full bg-primary hover:bg-primary/90 text-slate-900 font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 group active:scale-[0.98]">
+            Cập nhật PIN
             <span class="material-symbols-outlined text-sm font-bold group-hover:translate-x-1 transition-transform">arrow_forward</span>
           </button>
         </footer>
       </div>
     `;
-
     // Setup input auto-advance logic
     setupPinInputs(container);
 

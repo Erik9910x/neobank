@@ -42,10 +42,10 @@ export function renderQrPay(container) {
             100% { transform: scale(2.5); opacity: 0; }
         }
       </style>
-      <div class="relative flex h-[100dvh] w-full flex-col bg-background-light dark:bg-background-dark max-w-md mx-auto overflow-hidden font-display shadow-2xl safe-area-bottom">
-        <!-- Header - Notch Safe -->
-        <header class="pt-6 pb-4 px-6 flex items-center justify-between bg-transparent z-20 notch-safe-top">
-          <button id="btn-back" class="flex size-10 items-center justify-center rounded-full bg-slate-900/40 dark:bg-slate-100/10 backdrop-blur-md transition-colors hover:bg-slate-900/60" style="${mode === 'scan' ? 'background:rgba(15,23,42,0.4)' : ''}">
+      <div class="screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 flex flex-col font-display">
+        <!-- Header -->
+        <header class="notch-safe-top z-20 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+          <button id="btn-back" class="flex size-10 items-center justify-center rounded-full ${mode === 'scan' ? 'bg-slate-900/40 dark:bg-slate-100/10' : 'hover:bg-slate-200 dark:hover:bg-slate-800'} transition-colors">
             <span class="material-symbols-outlined ${mode === 'scan' ? 'text-white' : 'text-slate-900 dark:text-slate-100'}">arrow_back</span>
           </button>
           <h2 class="${mode === 'scan' ? 'text-white' : 'text-slate-900 dark:text-slate-100'} text-lg font-bold tracking-tight">${mode === 'scan' ? 'Quét mã QR' : 'Mã QR nhận tiền'}</h2>
@@ -59,11 +59,10 @@ export function renderQrPay(container) {
           ${mode === 'scan' ? renderScanMode() : renderMyQR()}
         </div>
 
-        <!-- Toggle & Bottom Controls Area -->
-        <div class="relative z-30 ${mode === 'scan' ? '-mt-12' : ''}">
-          <div class="bg-background-light dark:bg-background-dark rounded-t-3xl px-6 pt-6 pb-4 shadow-[0_-10px_40px_rgba(0,0,0,0.3)] border-t border-slate-200 dark:border-slate-800">
-            <!-- Mode Toggle -->
-            <div class="flex p-1 bg-slate-200 dark:bg-slate-800/50 rounded-xl mb-6 max-w-xs mx-auto">
+        <!-- Mode Toggle Area -->
+        <div class="notch-safe-bottom z-30 transition-all ${mode === 'scan' ? '-mt-12' : ''}">
+          <div class="bg-white dark:bg-background-dark rounded-t-3xl px-6 pt-6 pb-2 border-t border-slate-200 dark:border-slate-800">
+            <div class="flex p-1 bg-slate-200 dark:bg-slate-800/50 rounded-xl mb-4 max-w-xs mx-auto">
               <button class="login-tab flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${mode === 'scan' ? 'bg-primary text-white shadow-lg' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-300 dark:hover:bg-slate-700/50'}" data-mode="scan">Quét QR</button>
               <button class="login-tab flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${mode === 'myqr' ? 'bg-primary text-white shadow-lg' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-300 dark:hover:bg-slate-700/50'}" data-mode="myqr">QR của tôi</button>
             </div>
@@ -421,8 +420,7 @@ export function renderQrPay(container) {
     }
     
     showToast('Đã nhận diện VietQR thành công', 'success');
-    window.draftTransfer = result;
-    setTimeout(() => navigate('transfer'), 500);
+    showQrPayModal(null, result);
   }
 
   function openScannerOverlay() {
@@ -435,14 +433,7 @@ export function renderQrPay(container) {
       const randomUser = DB.users.find(u => u.id !== getCurrentUserId() && u.role !== 'admin');
       if (randomUser) {
         // Quick scanning a user from Neobank directly
-        window.draftTransfer = { 
-          accountNo: randomUser.id, 
-          recipientName: randomUser.name, 
-          bankBin: '970422', // MB Bank default mock for users
-          amount: '', 
-          note: '' 
-        };
-        navigate('transfer');
+        showQrPayModal(randomUser.id);
       }
     }, 1500);
   }
@@ -496,7 +487,7 @@ export function renderQrPay(container) {
     let nameDisplay = externalData?.recipientName || resolveAccountName(accountDisplay);
     let avatarChar = nameDisplay ? nameDisplay.charAt(0) : 'B';
     
-    // Dynamic bank lookup using all 65 Napas banks
+    // Dynamic bank lookup
     let bankName = VIETQR_BANKS[bankBin] || 'Ngân hàng thụ hưởng';
 
     if (toUserId) {
@@ -508,41 +499,43 @@ export function renderQrPay(container) {
     } 
 
     const modalOverlay = showModal(`
-      <h3 class="modal-title" style="text-align:center;width:100%;font-size:18px;font-weight:700;margin-bottom:12px;">Xác nhận thanh toán</h3>
+      <h3 class="modal-title text-center text-lg font-bold mb-4">Xác nhận thanh toán</h3>
       
       <!-- Thông tin người thụ hưởng -->
-      <div class="card" style="padding:16px;border:1px solid rgba(0,0,0,0.05);background:var(--card-bg);border-radius:16px;margin-bottom:24px;box-shadow:0 4px 12px rgba(0,0,0,0.03)">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed rgba(var(--accent-rgb, 13, 185, 242), 0.3)">
-          <div style="width:52px;height:52px;border-radius:50%;background:var(--accent-gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:24px;box-shadow: 0 4px 10px rgba(var(--accent-rgb, 13, 185, 242), 0.3)">${avatarChar}</div>
-          <div style="flex:1;overflow:hidden">
-            <div style="font-weight:800; font-size:16px; color:var(--text); text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis" title="${nameDisplay}">${nameDisplay}</div>
-            <div style="font-size:13px; color:var(--text-muted); margin-top:4px; font-weight:500">${bankName}</div>
+      <div class="card mb-6 p-4 bg-slate-100 dark:bg-slate-800 border-none rounded-2xl">
+        <div class="flex items-center gap-4 mb-4 pb-4 border-b border-dashed border-slate-300 dark:border-slate-700">
+          <div class="size-14 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xl shadow-lg ring-4 ring-primary/20">${avatarChar}</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-base text-slate-900 dark:text-white uppercase truncate">${nameDisplay}</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">${bankName}</div>
           </div>
         </div>
         
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-size:13px; color:var(--text-muted);">Số tài khoản:</span>
-          <span style="font-family:monospace; font-weight:700; font-size:15px; color:var(--text)">${accountDisplay}</span>
+        <div class="flex justify-between items-center text-sm">
+          <span class="text-slate-500">Số tài khoản:</span>
+          <span class="font-mono font-bold text-slate-900 dark:text-white">${accountDisplay}</span>
         </div>
       </div>
 
-      <div class="form-group mb-5">
-        <label class="form-label" style="font-size:14px; font-weight:600; color:var(--text-muted); margin-bottom:8px; display:block">Số tiền thanh toán</label>
-        <div class="amount-input-wrap">
-          <input type="text" id="qr-amount" placeholder="0" inputmode="numeric" value="${initialAmount}">
-          <span class="amount-currency">VND</span>
+      <div class="form-group mb-6">
+        <label class="form-label text-sm font-semibold text-slate-500 mb-2">Số tiền thanh toán</label>
+        <div class="relative">
+          <input type="text" id="qr-amount" class="form-input text-2xl font-bold h-16 pl-4 pr-16 rounded-2xl" placeholder="0" inputmode="numeric" value="${initialAmount}">
+          <span class="absolute right-4 top-1/2 -translate-y-1/2 font-bold text-primary">VND</span>
         </div>
       </div>
       
       <div class="form-group mb-8">
-        <label class="form-label" style="font-size:14px; font-weight:600; color:var(--text-muted); margin-bottom:8px; display:block">Nội dung</label>
-        <textarea class="form-input" id="qr-note" placeholder="Nhập nội dung chuyển khoản" rows="2" style="resize:none; padding:12px; border-radius:12px">${initialNote}</textarea>
+        <label class="form-label text-sm font-semibold text-slate-500 mb-2">Nội dung</label>
+        <textarea class="form-input rounded-2xl p-4 min-h-[80px]" id="qr-note" placeholder="Nhập nội dung chuyển khoản" rows="2">${initialNote}</textarea>
       </div>
 
-      <button class="btn btn-primary btn-full p-4 text-base font-bold shadow-lg shadow-primary/30 flex justify-center items-center gap-2 mb-3" id="btn-qr-confirm">
-        <span class="material-symbols-outlined" style="font-size:22px">send</span> Xác nhận chuyển
-      </button>
-      <button class="btn btn-ghost btn-full font-medium" id="btn-qr-cancel">Hủy bỏ</button>
+      <div class="space-y-3">
+        <button class="btn btn-primary btn-full h-14 text-base font-bold rounded-2xl shadow-xl shadow-primary/20" id="btn-qr-confirm">
+          <span class="material-symbols-outlined">send</span> Xác nhận chuyển
+        </button>
+        <button class="btn btn-ghost btn-full font-semibold" id="btn-qr-cancel">Hủy bỏ</button>
+      </div>
     `);
 
     // Format initial amount if any
@@ -565,11 +558,9 @@ export function renderQrPay(container) {
       if (!raw || Number(raw) <= 0) { showToast('Nhập số tiền hợp lệ', 'error'); return; }
       closeModal(modalOverlay);
 
-      // We fake the user receiving it to be u2 so the API accepts the transfer without erroring out
       const reqToUserId = toUserId || 'u2'; 
       const res = await api('qr-pay', { amount: raw, note: note || 'QR Pay', toUserId: reqToUserId });
       if (res.ok) {
-        // Success overlay full screen
         const sOverlay = document.createElement('div');
         sOverlay.className = 'fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-900/95 backdrop-blur-md overflow-hidden';
         sOverlay.innerHTML = `
@@ -596,7 +587,6 @@ export function renderQrPay(container) {
     });
   }
 
-  // Observe DOM removal to stop camera
   const observer = new MutationObserver((mutations) => {
     for (const mutation of mutations) {
       for (const removedNode of mutation.removedNodes) {

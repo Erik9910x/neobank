@@ -73,11 +73,10 @@ export function renderDashboard(container, state = null) {
 
     container.innerHTML = `
 <div class="screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 flex flex-col font-display">
-  <!-- Header -->
-  <header class="notch-safe-top sticky top-0 z-20 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-4 flex items-center justify-between">
-    <div class="flex items-center gap-2">
-      <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
-        <span class="material-symbols-outlined text-primary text-2xl">account_balance_wallet</span>
+  <header class="notch-safe-top z-20 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-lg border border-primary/30">
+        ${user?.name.charAt(0) || 'U'}
       </div>
       <div>
         <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Chào mừng trở lại,</p>

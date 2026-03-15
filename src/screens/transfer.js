@@ -98,9 +98,9 @@ export function renderTransfer(container) {
     let defaultNote = user ? removeVietnameseTones(user.name).toUpperCase() + ' chuyen tien' : 'Chuyen tien NeoBank';
 
     container.innerHTML = `
-<div class="screen font-display text-slate-100 flex flex-col">
+<div class="screen bg-background-dark text-slate-100 flex flex-col font-display">
   <!-- Header -->
-  <header class="flex items-center justify-between p-3 sticky top-0 bg-background-dark/80 backdrop-blur-md z-20 notch-safe-top">
+  <header class="flex items-center justify-between p-3 z-20 notch-safe-top bg-background-dark/80 backdrop-blur-md">
     <button id="btn-back" class="p-1 rounded-full hover:bg-slate-800 transition-colors">
       <span class="material-symbols-outlined block">arrow_back</span>
     </button>
@@ -164,8 +164,8 @@ export function renderTransfer(container) {
     </div>
   </main>
 
-  <!-- Floating Continue Button -->
-  <div class="fixed bottom-28 left-0 right-0 px-4 z-20 max-w-[430px] mx-auto">
+  <!-- Floating Continue Button Area -->
+  <div class="notch-safe-bottom z-20 max-w-[430px] mx-auto w-full px-4 mb-8">
     <button id="btn-continue" class="w-full bg-primary hover:bg-primary/90 text-slate-900 font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-95 flex items-center justify-center gap-2 text-base" ${isProcessing ? 'disabled' : ''}>
       ${isProcessing ? `
         <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
@@ -248,8 +248,8 @@ export function renderTransfer(container) {
   </div>
 </div>
 
-<div id="bill-screen" class="fixed inset-0 z-[70] bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display flex flex-col overflow-y-auto" style="display:none">
-  <div class="relative flex min-h-[100dvh] w-full max-w-md mx-auto flex-col overflow-x-hidden pb-10 safe-area-bottom">
+<div id="bill-screen" class="fixed inset-0 z-[70] bg-background-dark text-slate-100 font-display flex flex-col overflow-y-auto" style="display:none">
+  <div class="relative flex min-h-[100dvh] w-full max-w-md mx-auto flex-col overflow-x-hidden">
     <div id="capture-area" class="flex flex-col flex-1 bg-background-dark">
       <!-- Header / Notch Space -->
       <div class="safe-top bg-background-dark h-8"></div>

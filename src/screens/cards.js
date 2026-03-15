@@ -12,7 +12,13 @@ export function renderCards(container) {
   let flippedId = null;
 
   async function load() {
-    container.innerHTML = `<div class="screen-content stagger"><div class="page-header"><h1 class="page-title">Thẻ của tôi</h1></div>${skeletonCard()}${skeletonCard()}</div>`;
+    container.innerHTML = `
+<div class="screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+  <header class="notch-safe-top z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-4">
+    <h1 class="text-lg font-bold">Thẻ của tôi</h1>
+  </header>
+  <main class="scroll-content stagger px-4 py-6">${skeletonCard()}${skeletonCard()}</main>
+</div>`;
     const res = await api('cards');
     if (!res.ok) { showToast(res.error, 'error'); return; }
     cards = res.cards;
@@ -23,11 +29,15 @@ export function renderCards(container) {
     container.className = 'screen';
     container.style.padding = '0';
     container.innerHTML = `
-      <div class="screen-content stagger">
-        <div class="page-header animate-fade-in">
-          <button class="back-btn" id="btn-back">←</button>
-          <h1 class="page-title">Thẻ của tôi</h1>
-        </div>
+<div class="screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+  <header class="notch-safe-top z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-4 flex items-center gap-4">
+    <button id="btn-back" class="size-10 rounded-full flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+      <span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
+    </button>
+    <h1 class="text-lg font-bold">Thẻ của tôi</h1>
+  </header>
+
+  <main class="scroll-content stagger px-4 py-6 pb-32">
 
         ${cards.map((card, i) => `
           <div class="virtual-card-container animate-pop" style="animation-delay:${i * 0.15}s; perspective: 1000px; position:relative; width:100%;">
@@ -121,6 +131,8 @@ export function renderCards(container) {
         <p class="text-sm text-muted text-center mt-24 animate-fade-in">
           💡 Nhấn vào thẻ để xem chi tiết mặt sau
         </p>
+          </div>
+        </main>
       </div>`;
 
     // Back

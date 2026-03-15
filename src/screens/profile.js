@@ -24,26 +24,12 @@ export function renderProfile(container) {
     container.style.padding = '0';
     const { user, account } = profile;
     container.innerHTML = `
-<div class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 screen flex flex-col relative max-w-md mx-auto shadow-2xl">
-  <div class="absolute inset-0 z-0 bg-background-light dark:bg-background-dark"></div>
-  <div class="relative z-10 flex flex-col h-full w-full overflow-y-auto no-scrollbar">
-<!-- Header -->
-<header class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-<div class="flex items-center justify-between p-4 w-full notch-safe-top">
-<button class="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-full transition-colors" onclick="history.back()">
-<span class="material-symbols-outlined block">arrow_back</span>
-</button>
-<h1 class="text-lg font-bold">Cá nhân</h1>
-<button class="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-full transition-colors relative">
-<span class="material-symbols-outlined block">notifications</span>
-<span class="absolute top-2 right-2 flex h-2 w-2">
-<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+<div class="screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 flex flex-col font-display">
+  <!-- Header -->
 </span>
 </button>
 </div>
 </header>
-<!-- Main Content -->
 <main class="flex-1 w-full pb-32 overflow-y-auto no-scrollbar stagger">
 <!-- User Info Section -->
 <section class="flex flex-col items-center py-8 px-4">

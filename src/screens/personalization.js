@@ -38,19 +38,18 @@ export function renderPersonalization(container) {
     const fontSizeValue = userPrefs.fontSize <= 12 ? 1 : (userPrefs.fontSize >= 16 ? 3 : 2);
 
     container.innerHTML = `
-<!-- Header -->
-<header class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-<div class="flex items-center p-4 justify-between max-w-md mx-auto w-full notch-safe-top">
-<div class="flex items-center gap-3">
-<button id="btn-back" class="flex size-10 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
-<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">arrow_back</span>
+<div class="screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 flex flex-col font-display">
+<header class="notch-safe-top z-20 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-4 flex items-center gap-4">
+<button id="btn-back" class="size-10 rounded-full flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
 </button>
-<h1 class="text-xl font-bold leading-tight tracking-tight">Cá nhân hóa Neo</h1>
-</div>
+<h2 class="text-lg font-bold">Cá nhân hóa</h2>
+</header>
+
+<main class="scroll-content stagger px-6 pb-32">
+<div class="flex justify-end mb-6">
 <button id="btn-save" class="text-primary font-semibold text-sm">Lưu</button>
 </div>
-</header>
-<main class="flex-1 max-w-md mx-auto w-full px-4 py-6 space-y-8 pb-24 stagger">
 <!-- UI Preview Card Section -->
 <section>
 <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4 px-1">Xem trước</h3>
@@ -188,7 +187,7 @@ ${userPrefs.accentGradient === 'linear-gradient(135deg, #1e293b, #0f172a)' ? '<s
 </div>
 </section>
 </main>
-    `;
+</div>`;
 
     attachEvents();
   }
