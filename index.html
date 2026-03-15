@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>NeoBank Encrypted</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="src/styles/index.css">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "var(--primary, #0db9f2)",
+                        "background-light": "#f5f8f8",
+                        "background-dark": "#101e22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        :root {
+            --primary: #0db9f2;
+            --primary-glow: rgba(13, 185, 242, 0.3);
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #101e22;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .glow-effect {
+            box-shadow: 0 0 20px 2px var(--primary-glow);
+        }
+        .bg-gradient-mesh {
+            background: radial-gradient(circle at 60% 40%, rgba(var(--accent-rgb, 13, 185, 242), 0.12) 0%, rgba(16, 30, 34, 1) 100%);
+        }
+        .loading-bar {
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+        /* Popup Animation */
+        @keyframes slideIn {
+            from { transform: translateY(-100%) translateX(-50%); opacity: 0; }
+            to { transform: translateY(0) translateX(-50%); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateY(0) translateX(-50%); opacity: 1; }
+            to { transform: translateY(-100%) translateX(-50%); opacity: 0; }
+        }
+        .popup-show {
+            animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .popup-hide {
+            animation: slideOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .safe-area-top {
+            padding-top: env(safe-area-inset-top);
+        }
+    </style>
+</head>
+<body class="bg-background-dark font-display antialiased">
+    <!-- App Container (Target for main.js) -->
+    <div id="app" class="relative z-10 transition-opacity duration-1000 opacity-0"></div>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background-dark bg-gradient-mesh transition-opacity duration-700">
+        <div class="relative mb-8">
+            <div class="absolute inset-0 bg-primary/20 blur-3xl rounded-full scale-150" style="background-color: rgba(var(--accent-rgb, 13, 185, 242), 0.2)"></div>
+            <div class="relative z-10 w-24 h-24 flex items-center justify-center">
+                <span class="material-symbols-outlined text-primary text-7xl animate-pulse" style="color: var(--primary)">shield_lock</span>
+            </div>
+        </div>
+        <div class="w-48 h-1 bg-white/10 rounded-full overflow-hidden">
+            <div id="progress-bar" class="h-full bg-primary loading-bar" style="background-color: var(--primary); box-shadow: 0 0 10px var(--primary)"></div>
+        </div>
+        <p class="mt-4 text-white/40 text-xs tracking-widest uppercase font-semibold">Encrypting Session</p>
+    </div>
+
+    <!-- Entry UI Container -->
+    <div id="entry-ui-container" class="fixed inset-0 z-40 transition-opacity duration-1000 flex flex-col bg-background-dark overflow-hidden safe-area-top bg-gradient-mesh">
+        <!-- Status Popup (Hidden Initially) -->
+        <div id="model-popup" class="fixed top-4 left-1/2 -translate-x-1/2 z-[100] opacity-0 pointer-events-none">
+            <div class="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full flex items-center gap-3 shadow-2xl">
+                <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                <span id="model-text" class="text-white text-sm font-medium">Đã xác định mẫu máy: iPhone X</span>
+            </div>
+        </div>
+
+        <div class="flex items-center p-4 pb-2 justify-between">
+            <div class="text-primary flex size-12 shrink-0 items-center justify-center">
+                <span class="material-symbols-outlined text-3xl">shield</span>
+            </div>
+            <div class="text-slate-400 text-xs font-medium uppercase tracking-widest">
+                Encrypted
+            </div>
+        </div>
+
+        <div class="flex w-full grow flex-col items-center justify-center p-8">
+            <h1 class="text-white text-3xl font-bold mb-2">NeoBank</h1>
+            <p class="text-slate-400 text-center mb-8">Giao dịch an toàn, bảo mật tuyệt đối.</p>
+            <div id="main-ui" class="opacity-0 transition-opacity duration-1000 flex flex-col items-center">
+                <button id="enter-app-btn" class="bg-primary text-black font-bold px-12 py-4 rounded-xl shadow-lg active:scale-95 transition-transform">
+                    VÀO ỨNG DỤNG
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const IPHONE_DB = {
+            // Mapping: "Width,Height,PixelRatio,GPU"
+            // iPhone 16 Series
+            "430,932,3,Apple A18 Pro GPU": "iPhone 16 Pro Max",
+            "393,852,3,Apple A18 Pro GPU": "iPhone 16 Pro",
+            "430,932,3,Apple A18 GPU": "iPhone 16 Plus",
+            "393,852,3,Apple A18 GPU": "iPhone 16",
+            
+            // iPhone 15 Series
+            "430,932,3,Apple A17 Pro GPU": "iPhone 15 Pro Max",
+            "393,852,3,Apple A17 Pro GPU": "iPhone 15 Pro",
+            "430,932,3,Apple A16 Bionic GPU": "iPhone 15 Plus",
+            "390,844,3,Apple A16 Bionic GPU": "iPhone 15",
+            
+            // iPhone 14 Series
+            "430,932,3,Apple A16 Bionic GPU": "iPhone 14 Pro Max", 
+            "393,852,3,Apple A16 Bionic GPU": "iPhone 14 Pro",
+            "428,926,3,Apple A15 GPU": "iPhone 14 Plus",
+            "390,844,3,Apple A15 GPU": "iPhone 14",
+            
+            // iPhone 13 Series
+            "428,926,3,Apple A15 GPU": "iPhone 13 Pro Max",
+            "390,844,3,Apple A15 GPU": "iPhone 13 Pro",
+            "390,844,3,Apple A15 GPU": "iPhone 13", 
+            "375,812,3,Apple A15 GPU": "iPhone 13 Mini",
+            
+            // iPhone 12 Series
+            "428,926,3,Apple A14 GPU": "iPhone 12 Pro Max",
+            "390,844,3,Apple A14 GPU": "iPhone 12 / 12 Pro",
+            "360,780,3,Apple A14 GPU": "iPhone 12 Mini",
+            
+            // Older Models
+            "414,896,3,Apple A13 GPU": "iPhone 11 Pro Max",
+            "375,812,3,Apple A13 GPU": "iPhone 11 Pro",
+            "414,896,2,Apple A13 GPU": "iPhone 11",
+            "414,896,3,Apple A12 GPU": "iPhone XS Max",
+            "375,812,3,Apple A12 GPU": "iPhone X / XS",
+            "414,896,2,Apple A12 GPU": "iPhone XR"
+        };
+
+        // Fallback map based JUST on resolution (for simulation/unknown GPU)
+        const IPHONE_FALLBACK = {
+            "430,932,3": "iPhone 14/15/16 Pro Max",
+            "393,852,3": "iPhone 14/15/16 Pro",
+            "390,844,3": "iPhone 12/13/14/15",
+            "428,926,3": "iPhone 12/13/14 Pro Max",
+            "375,812,3": "iPhone X/XS/11Pro/13Mini",
+            "414,896,2": "iPhone 11/XR",
+            "414,896,3": "iPhone 11 Pro Max/XS Max",
+            "360,780,3": "iPhone 12/13 Mini",
+            "375,667,2": "iPhone 6/7/8/SE",
+            "414,736,3": "iPhone 6/7/8 Plus"
+        };
+
+        function getWebGLRenderer() {
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (!gl) return "Unknown GPU";
+                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                if (!debugInfo) return "Unknown GPU";
+                return gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+            } catch (e) {
+                return "Unknown GPU";
+            }
+        }
+
+        function getIphoneModel() {
+            const width = window.screen.width;
+            const height = window.screen.height;
+            const dpr = Math.round(window.devicePixelRatio); // Round to avoid float issues
+            const renderer = getWebGLRenderer();
+            
+            // Normalize renderer string
+            let gpu = "Unknown GPU";
+            if (renderer.includes("A18 Pro")) gpu = "Apple A18 Pro GPU";
+            else if (renderer.includes("A18")) gpu = "Apple A18 GPU";
+            else if (renderer.includes("A17 Pro")) gpu = "Apple A17 Pro GPU";
+            else if (renderer.includes("A16")) gpu = "Apple A16 Bionic GPU";
+            else if (renderer.includes("A15")) gpu = "Apple A15 GPU";
+            else if (renderer.includes("A14")) gpu = "Apple A14 GPU";
+            else if (renderer.includes("A13")) gpu = "Apple A13 GPU";
+            else if (renderer.includes("A12")) gpu = "Apple A12 GPU";
+            else if (renderer.includes("Apple")) gpu = "Apple GPU";
+
+            const exactKey = `${Math.min(width, height)},${Math.max(width, height)},${dpr},${gpu}`;
+            const fallbackKey = `${Math.min(width, height)},${Math.max(width, height)},${dpr}`;
+            
+            // 1. Try exact match (Screen + GPU)
+            if (IPHONE_DB[exactKey]) return IPHONE_DB[exactKey];
+            
+            // 2. Try fallback match (Screen ONLY) - helpful for simulator or unknown GPU
+            if (IPHONE_FALLBACK[fallbackKey]) return IPHONE_FALLBACK[fallbackKey];
+
+            // 3. Last resort string
+            return gpu !== "Unknown GPU" && gpu !== "Apple GPU" ? `${gpu} iPhone` : "iPhone Modern";
+        }
+
+        window.addEventListener('load', () => {
+            const progressBar = document.getElementById('progress-bar');
+            const loadingScreen = document.getElementById('loading-screen');
+            const modelPopup = document.getElementById('model-popup');
+            const modelText = document.getElementById('model-text');
+            const mainUI = document.getElementById('main-ui');
+            const enterBtn = document.getElementById('enter-app-btn');
+            const appContainer = document.getElementById('app');
+            const entryUIContainer = document.getElementById('entry-ui-container');
+
+            // Simulate loading
+            setTimeout(() => progressBar.style.width = '40%', 200);
+            setTimeout(() => progressBar.style.width = '70%', 600);
+            setTimeout(() => progressBar.style.width = '100%', 1000);
+
+            setTimeout(() => {
+                loadingScreen.classList.add('opacity-0');
+                mainUI.classList.remove('opacity-0');
+                
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    
+                    // Show Model Popup
+                    const modelName = getIphoneModel();
+                    modelText.textContent = `Đã xác định: ${modelName}`;
+                    modelPopup.classList.remove('opacity-0');
+                    modelPopup.classList.add('popup-show');
+
+                    // Hide Popup after 4 seconds
+                    setTimeout(() => {
+                        modelPopup.classList.replace('popup-show', 'popup-hide');
+                    }, 4000);
+
+                }, 700);
+            }, 1500);
+
+            // Entry Button Logic
+            enterBtn.addEventListener('click', () => {
+                // Fade out entry UI
+                entryUIContainer.classList.add('opacity-0');
+                setTimeout(() => {
+                    entryUIContainer.style.display = 'none';
+                    // Show App Container
+                    appContainer.classList.remove('opacity-0');
+                }, 1000);
+            });
+        });
+    </script>
+    <script type="module" src="src/main.js"></script>
+</body>
+</html>
