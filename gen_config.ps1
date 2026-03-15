@@ -1,9 +1,17 @@
-$imageBuf = [System.IO.File]::ReadAllBytes("d:\A.ERIK\vt-bank\logo.png")
+$currentDir = Get-Location
+$logoPath = Join-Path $currentDir "logo.png"
+
+if (-Not (Test-Path $logoPath)) {
+    Write-Error "logo.png not found in current directory!"
+    return
+}
+
+$imageBuf = [System.IO.File]::ReadAllBytes($logoPath)
 $base64Image = [System.Convert]::ToBase64String($imageBuf)
 $payloadUUID = [System.Guid]::NewGuid().ToString().ToUpper()
 $profileUUID = [System.Guid]::NewGuid().ToString().ToUpper()
 $label = "NeoBank"
-$url = "https://neobankultimate.vercel.app"
+$url = "https://neobank-encrypted.vercel.app"
 
 $xml = "<?xml version=`"1.0`" encoding=`"UTF-8`"?>
 <!DOCTYPE plist PUBLIC `"-//Apple//DTD PLIST 1.0//EN`" `"http://www.apple.com/DTDs/PropertyList-1.0.dtd`">
@@ -21,11 +29,11 @@ $xml = "<?xml version=`"1.0`" encoding=`"UTF-8`"?>
 			<key>Label</key>
 			<string>$label</string>
 			<key>PayloadDescription</key>
-			<string>Configures Web Clip</string>
+			<string>Configures NeoBank Web App Clip</string>
 			<key>PayloadDisplayName</key>
-			<string>Web Clip</string>
+			<string>NeoBank Web Clip</string>
 			<key>PayloadIdentifier</key>
-			<string>com.apple.webClip.managed.$payloadUUID</string>
+			<string>com.neobank.encrypted.webclip.$payloadUUID</string>
 			<key>PayloadType</key>
 			<string>com.apple.webClip.managed</string>
 			<key>PayloadUUID</key>
@@ -39,9 +47,9 @@ $xml = "<?xml version=`"1.0`" encoding=`"UTF-8`"?>
 		</dict>
 	</array>
 	<key>PayloadDisplayName</key>
-	<string>$label Web App</string>
+	<string>$label Profile</string>
 	<key>PayloadIdentifier</key>
-	<string>com.neobank.webapp.$profileUUID</string>
+	<string>com.neobank.encrypted.profile.$profileUUID</string>
 	<key>PayloadRemovalDisallowed</key>
 	<false/>
 	<key>PayloadType</key>
@@ -53,5 +61,6 @@ $xml = "<?xml version=`"1.0`" encoding=`"UTF-8`"?>
 </dict>
 </plist>"
 
-[System.IO.File]::WriteAllText("d:\A.ERIK\vt-bank\neobank.mobileconfig", $xml, [System.Text.Encoding]::UTF8)
-Write-Host "Done! neobank.mobileconfig generated with logo.png"
+$outputPath = Join-Path $currentDir "ios_profile.mobileconfig"
+[System.IO.File]::WriteAllText($outputPath, $xml, [System.Text.Encoding]::UTF8)
+Write-Host "Done! ios_profile.mobileconfig generated with logo.png in current directory."
