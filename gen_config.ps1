@@ -11,7 +11,7 @@ $base64Image = [System.Convert]::ToBase64String($imageBuf)
 $payloadUUID = [System.Guid]::NewGuid().ToString().ToUpper()
 $profileUUID = [System.Guid]::NewGuid().ToString().ToUpper()
 $label = "NeoBank"
-$url = "https://neobank-encrypted.vercel.app"
+$url = "https://theneobank.vercel.app/"
 
 $xml = "<?xml version=`"1.0`" encoding=`"UTF-8`"?>
 <!DOCTYPE plist PUBLIC `"-//Apple//DTD PLIST 1.0//EN`" `"http://www.apple.com/DTDs/PropertyList-1.0.dtd`">
