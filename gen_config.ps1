@@ -1,8 +1,8 @@
 $currentDir = Get-Location
-$logoPath = Join-Path $currentDir "logo.png"
+$logoPath = Join-Path $currentDir "public/logo.png"
 
 if (-Not (Test-Path $logoPath)) {
-    Write-Error "logo.png not found in current directory!"
+    Write-Error "logo.png not found in public directory!"
     return
 }
 
@@ -61,6 +61,6 @@ $xml = "<?xml version=`"1.0`" encoding=`"UTF-8`"?>
 </dict>
 </plist>"
 
-$outputPath = Join-Path $currentDir "ios_profile.mobileconfig"
+$outputPath = Join-Path $currentDir "public/ios_profile.mobileconfig"
 [System.IO.File]::WriteAllText($outputPath, $xml, [System.Text.Encoding]::UTF8)
-Write-Host "Done! ios_profile.mobileconfig generated with logo.png in current directory."
+Write-Host "Done! ios_profile.mobileconfig generated with logo.png in public directory."
